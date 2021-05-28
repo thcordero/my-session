@@ -6,11 +6,13 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
-const MongoStore = require('connect-mongo');
+const MongoStore = require("connect-mongo");
+const path = require("path")
 
 
 const app = express();
 
+app.use(express.static(path.join(__dirname, 'build')));
 
 app.use(bodyParser.urlencoded({
     extended: true
@@ -221,6 +223,9 @@ app.delete("/api/list/:userId", (req, res) => {
 
 });
 
+app.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname,'build','index.html'));
+});
 
 app.listen(process.env.PORT || 5000, function () {
     console.log("Server started on port 5000");
