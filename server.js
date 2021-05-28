@@ -12,7 +12,7 @@ const path = require("path");
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, 'client/build/')));
+app.use(express.static(path.join(__dirname, 'client', 'build')));
 
 app.use(bodyParser.urlencoded({
     extended: true
