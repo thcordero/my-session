@@ -11,11 +11,6 @@ import ProtectedRoute from "./ProtectedRoute";
 import {ProvideAuth} from "./Auth";
 import Login from "./Login"
 
-
-
-
-
-
 const App = () => {
 
   return (
