@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useHistory, Redirect } from "react-router";
-import axios from "./axios";
-import Register from "./Register.jsx";
+import React, { useState } from "react";
+import { Redirect } from "react-router";
 import { useAuth } from "./Auth";
 
 const Login = () => {
