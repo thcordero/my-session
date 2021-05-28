@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-
 import { Redirect } from "react-router";
-
-import axios from "./axios";
 import { useAuth } from "./Auth";
 
 
