@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 app.use(session({
-    secret: "sUperSecreTo123456*/#/*-*$&@#$!@*$#(&%@)!",
+    secret: process.env.GO_ON,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -30,7 +30,7 @@ app.use(session({
     },
     
     store: MongoStore.create({
-        mongoUrl: "mongodb+srv://thcordero:123@cluster0.s9n4e.mongodb.net/myUsers",
+        mongoUrl: process.env.URL_DB,
     }),
 
 }));
@@ -48,7 +48,7 @@ app.use(cors({
 }));
 
 
-mongoose.connect("mongodb+srv://thcordero:123@cluster0.s9n4e.mongodb.net/myUsers", {
+mongoose.connect(process.env.URL_DB, {
 
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -233,5 +233,5 @@ app.get('/*', (req, res) => {
 });
 
 app.listen(process.env.PORT || 5000, () => {
-    console.log("Server started on port 5000");
+    console.log("Server started...");
 });
