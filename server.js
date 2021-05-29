@@ -21,12 +21,12 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 app.use(session({
-    secret: process.env.GO_ON,
+    secret: "sUperSecreTo123456*/#/*-*$&@#$!@*$#(&%@)!",
     resave: false,
     saveUninitialized: false,
     httpOnly: false,
     store: MongoStore.create({
-        mongoUrl: process.env.URL_DB,
+        mongoUrl: "mongodb+srv://thcordero:123@cluster0.s9n4e.mongodb.net/myUsers",
     }),
 
 }));
