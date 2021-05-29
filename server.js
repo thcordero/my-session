@@ -26,7 +26,6 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         httpOnly: false,
-        secure: true,
     },
     
     store: MongoStore.create({
