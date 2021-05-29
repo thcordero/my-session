@@ -43,7 +43,7 @@ const Authentication = {
             this.errLogin = res.data.message;
             this.isLogged = res.data.isAuth;
             this.userData = res.data.user;
-        });
+        }).catch(err => console.log(err));
 
         return Promise.resolve({ user: this.userData, isAuth: this.isLogged, error: this.errLogin });
 
