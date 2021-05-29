@@ -48,7 +48,7 @@ app.use(cors({
 }));
 
 
-mongoose.connect(process.env.URL_DB, {
+mongoose.connect("mongodb+srv://thcordero:123@cluster0.s9n4e.mongodb.net/myUsers", {
 
     useNewUrlParser: true,
     useUnifiedTopology: true
