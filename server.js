@@ -12,7 +12,7 @@ const path = require("path");
 
 const app = express();
 
-// app.use(express.static(path.join(__dirname, 'client', 'build')));
+app.use(express.static(path.join(__dirname, 'client', 'build')));
 
 app.use(bodyParser.urlencoded({
     extended: true
@@ -105,7 +105,7 @@ app.post("/api/register", (req, res) => {
 app.post('/api/login', (req, res, next) => {
 
     passport.authenticate('local', (err, user, info) => {
-       
+
         if (err) {
             return next(err);
         }
@@ -224,9 +224,9 @@ app.delete("/api/list/:userId", (req, res) => {
 
 });
 
-// app.get('/*', function (req, res) {
-//     res.sendFile(path.join(__dirname, 'client','build','index.html'));
-// });
+app.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname, 'client','build','index.html'));
+});
 
 app.listen(process.env.PORT || 5000, () => {
     console.log("Server started on port 5000");
