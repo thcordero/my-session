@@ -78,6 +78,9 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+
+// Add Facebook Login
+
 app.post("/api/register", (req, res) => {
 
     const newUser = new User({
