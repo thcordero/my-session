@@ -24,7 +24,11 @@ app.use(session({
     secret: "sUperSecreTo123456*/#/*-*$&@#$!@*$#(&%@)!",
     resave: false,
     saveUninitialized: false,
-    httpOnly: false,
+    cookie: {
+        httpOnly: false,
+        secure: true,
+    },
+    
     store: MongoStore.create({
         mongoUrl: "mongodb+srv://thcordero:123@cluster0.s9n4e.mongodb.net/myUsers",
     }),
@@ -225,7 +229,7 @@ app.delete("/api/list/:userId", (req, res) => {
 });
 
 app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname,'build','index.html'));
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 app.listen(process.env.PORT || 5000, () => {
