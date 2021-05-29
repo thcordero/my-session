@@ -12,7 +12,7 @@ const path = require("path");
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, 'client', 'build')));
+app.use(express.static(path.join(__dirname, 'build')));
 
 app.use(bodyParser.urlencoded({
     extended: true
@@ -212,7 +212,7 @@ app.delete("/api/list/:userId", (req, res) => {
 
     const Item = new mongoose.model(req.params.userId + "Item", itemSchema);
 
-    Item.deleteOne({ _id: req.body.itemId }, (err) => {
+    Item.deleteOne({ _id: req.body.itemId }, err => {
         if (err) {
             console.log(err);
         }
@@ -224,8 +224,8 @@ app.delete("/api/list/:userId", (req, res) => {
 
 });
 
-app.get('/*', function (req, res) {
-    res.sendFile(path.join(__dirname, 'client','build','index.html'));
+app.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname,'build','index.html'));
 });
 
 app.listen(process.env.PORT || 5000, () => {
