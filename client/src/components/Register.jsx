@@ -53,7 +53,9 @@ const Register = () => {
 
     const handleFacebookLogin = () => {
 
-        axios.get("https://your-check-list.herokuapp.com/auth/facebook")
+        console.log("and the facebook login?");
+
+        axios.get("http://localhost:5000/auth/facebook/",{withCredentials: true})
             .then(res => console.log(res))
             .catch(err => console.log(err));
 

@@ -15,7 +15,7 @@ const findOrCreate = require('mongoose-find-or-create');
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, 'client', 'build')));
+// app.use(express.static(path.join(__dirname, 'client', 'build')));
 
 app.use(bodyParser.urlencoded({
     extended: true
@@ -29,9 +29,9 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         httpOnly: false,
-        maxAge: 3000*60*60,
+        maxAge: 3000 * 60 * 60,
     },
-    
+
     store: MongoStore.create({
         mongoUrl: process.env.URL_DB,
     }),
@@ -66,6 +66,7 @@ const userSchema = new mongoose.Schema({
     lastName: String,
     username: String,
     password: String,
+    facebookId: String,
 });
 
 
@@ -79,14 +80,14 @@ const User = new mongoose.model("User", userSchema);
 
 passport.use(User.createStrategy());
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
     done(null, user.id);
-  });
+});
 
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
+passport.deserializeUser(function (id, done) {
+    User.findById(id, function (err, user) {
+        done(err, user);
+    });
 });
 
 
@@ -95,22 +96,39 @@ passport.deserializeUser(function(id, done) {
 passport.use(new FacebookStrategy({
     clientID: "234403834687847",
     clientSecret: "60ebdbff923f8d599a03513b3230293a",
-    callbackURL: "https://your-check-list.herokuapp.com/auth/facebook/secrets"
-  },
-(accessToken, refreshToken, profile, done) => {
+    callbackURL: "http://localhost:5000/auth/facebook/callback",
+},
+    (accessToken, refreshToken, profile, done) => {
+        console.log(accessToken);
+        console.log(refreshToken);
+        User.findOrCreate({ facebookId: profile.id }, (err, user) => {
+            if (err) {
+                return done(err);
+            }
+            done(null, user);
+        });
+    }
 
-    User.findOrCreate({id: profile.id }, (err, user) => {
-      if (err) { return done(err); }
-      done(null, user);
-    });
-  }
 ));
 
-app.get("/auth/facebook", (req,res) =>{
+app.get("/auth/facebook", passport.authenticate('facebook'));
 
-    passport.authenticate("facebook", { scope: "read_stream" });
+app.get("/auth/facebook/callback", function (req, res) {
+
+
+    passport.authenticate("facebook")(req, res, () => {
+
+        console.log(req.isAuthenticated());
+        console.log(req.user);
+        res.send({ user: req.user, isAuth: req.isAuthenticated(), sessionID: req.sessionID });
+
+    });
 
 });
+
+
+
+
 
 /*---------------------------------------------------------------------*/
 
@@ -264,9 +282,9 @@ app.delete("/api/list/:userId", (req, res) => {
 
 });
 
-app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
-});
+// app.get('/*', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+// });
 
 app.listen(process.env.PORT || 5000, () => {
     console.log("Server started...");
