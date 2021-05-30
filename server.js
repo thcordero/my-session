@@ -108,7 +108,7 @@ passport.use(new FacebookStrategy({
 
 app.get("/auth/facebook", (req,res) =>{
 
-    passport.authenticate("facebook", { scope: ["profile"] });
+    passport.authenticate("facebook", { scope: "read_stream" });
 
 });
 
