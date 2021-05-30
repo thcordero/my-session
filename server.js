@@ -8,6 +8,9 @@ const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const MongoStore = require("connect-mongo");
 const path = require("path");
+const FacebookStrategy = require('passport-facebook').Strategy;
+const findOrCreate = require('mongoose-find-or-create');
+
 
 
 const app = express();
@@ -68,6 +71,7 @@ const userSchema = new mongoose.Schema({
 
 
 userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(findOrCreate);
 
 
 
@@ -79,7 +83,29 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-// Add Facebook Login
+// -------------------Add Facebook Login--------------------------------
+
+passport.use(new FacebookStrategy({
+    clientID: porcess.env.FACEBOOK_APP_ID,
+    clientSecret: process.env.FACEBOOK_APP_SECRET,
+    callbackURL: "https://your-check-list.herokuapp.com/auth/facebook/secrets"
+  },
+(accessToken, refreshToken, profile, done) => {
+
+    User.findOrCreate({id: profile.id }, (err, user) => {
+      if (err) { return done(err); }
+      done(null, user);
+    });
+  }
+));
+
+app.get("/auth/facebook", (req,res) =>{
+
+    passport.authenticate("facebook", { scope: ["profile"] });
+    
+});
+
+/*---------------------------------------------------------------------*/
 
 app.post("/api/register", (req, res) => {
 
