@@ -86,8 +86,8 @@ passport.deserializeUser(User.deserializeUser());
 // -------------------Add Facebook Login--------------------------------
 
 passport.use(new FacebookStrategy({
-    clientID: porcess.env.FACEBOOK_APP_ID,
-    clientSecret: process.env.FACEBOOK_APP_SECRET,
+    clientID: "234403834687847",
+    clientSecret: "60ebdbff923f8d599a03513b3230293a",
     callbackURL: "https://your-check-list.herokuapp.com/auth/facebook/secrets"
   },
 (accessToken, refreshToken, profile, done) => {
@@ -102,7 +102,7 @@ passport.use(new FacebookStrategy({
 app.get("/auth/facebook", (req,res) =>{
 
     passport.authenticate("facebook", { scope: ["profile"] });
-    
+
 });
 
 /*---------------------------------------------------------------------*/
