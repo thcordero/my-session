@@ -86,7 +86,12 @@ const Login = () => {
 
                             />
 
-                            <input className="login-button" type="submit" value="Login" />
+                            <input className="login-button btn btn-block" type="submit" value="Login" />
+
+                            <p> or </p>
+
+                            <a href="http://localhost:5000/auth/facebook" className="btn btn-block btn-social btn-facebook"> 
+                            <i class="fab fa-facebook"></i> Login with Facebook </a>
 
                         </form>
                     }

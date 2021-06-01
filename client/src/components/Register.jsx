@@ -32,7 +32,14 @@ const Register = () => {
     }
     const handleKeypress = event => {
         if (event.key === "Enter") {
-            handleSubmit();
+            auth.signup(inputUsername, inputPassword, inputName, inputLastName, () => {
+
+                setInputPassword("");
+                setInputUsername("");
+                setInputName("");
+                setInputLastName("");
+    
+            });
             console.log("Enter pressed");
         }
     }
@@ -51,15 +58,15 @@ const Register = () => {
         event.preventDefault();
     }
 
-    const handleFacebookLogin = () => {
+    // const handleFacebookLogin = () => {
 
-        console.log("and the facebook login?");
+    //     console.log("and the facebook login?");
 
-        axios.get("http://localhost:5000/auth/facebook/",{withCredentials: true})
-            .then(res => console.log(res))
-            .catch(err => console.log(err));
+    //     axios.get("http://localhost:5000/auth/facebook/",{withCredentials: true})
+    //         .then(res => console.log(res))
+    //         .catch(err => console.log(err));
 
-    }
+    // }
 
 
     return <div className="register-box">
@@ -109,14 +116,20 @@ const Register = () => {
 
                 />
 
-                <input className="register-button" type="submit" value="Create Account" />
+                <input className="register-button btn btn-block" type="submit" value="Create Account" />
+
+                <p> or </p>
+
+                <a href="http://localhost:5000/auth/facebook" className="btn btn-block btn-social btn-facebook">
+                <i class="fab fa-facebook"></i> Login with Facebook </a>
+                
 
             </form>
         }
 
         <p className="error-register-credentials" style={{ visibility: auth.registerError ? "visible" : "hidden" }}>{auth.registerError}</p>
 
-        <button onClick={handleFacebookLogin}> Login with Facebook </button>
+        {/* <button onClick={handleFacebookLogin}> Login with Facebook </button> */}
 
     </div>;
 

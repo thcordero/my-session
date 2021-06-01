@@ -56,9 +56,13 @@ body{
 .register-box{
     margin: auto;
     width: 220px;
-    height: 20rem;
-    position: relative
-  
+    height: 400px;
+    position: relative;
+    text-align: center;
+}
+
+.register-box a{
+    background-color: royalblue;
 }
 
 .register-data{
@@ -91,7 +95,7 @@ body{
     position: absolute;
     width: 240px;
     text-align: center;
-    top: 85%;
+    top: 95%;
     left: 50%;
     font-size: 0.7rem;
     color:  #cc0000;
@@ -154,6 +158,11 @@ padding: 0 20px;
 .add-item input{
     border: none;
    
+}
+
+.add-button {
+    background-color: #1DB954;
+    color: white;
 }
 
 .to-do-list-items{

@@ -97,11 +97,13 @@ passport.use(new FacebookStrategy({
     clientID: "234403834687847",
     clientSecret: "60ebdbff923f8d599a03513b3230293a",
     callbackURL: "http://localhost:5000/auth/facebook/callback",
+    profileFields: ['id', 'displayName', 'photos', 'emails']
+    
 },
     (accessToken, refreshToken, profile, done) => {
-        console.log(accessToken);
-        console.log(refreshToken);
+      
         User.findOrCreate({ facebookId: profile.id }, (err, user) => {
+            
             if (err) {
                 return done(err);
             }
@@ -111,7 +113,7 @@ passport.use(new FacebookStrategy({
 
 ));
 
-app.get("/auth/facebook", passport.authenticate('facebook'));
+app.get("/auth/facebook", passport.authenticate('facebook',{ scope : ['email'] }));
 
 app.get("/auth/facebook/callback", function (req, res) {
 
@@ -120,7 +122,7 @@ app.get("/auth/facebook/callback", function (req, res) {
 
         console.log(req.isAuthenticated());
         console.log(req.user);
-        res.send({ user: req.user, isAuth: req.isAuthenticated(), sessionID: req.sessionID });
+        res.redirect("http://localhost:3000/");
 
     });
 
