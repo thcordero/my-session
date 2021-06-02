@@ -90,7 +90,7 @@ const Login = () => {
 
                             <p> or </p>
 
-                            <a href="http://localhost:5000/auth/facebook" className="btn btn-block btn-social btn-facebook"> 
+                            <a href="https://your-check-list.herokuapp.com/auth/facebook" className="btn btn-block btn-social btn-facebook"> 
                             <i class="fab fa-facebook"></i> Login with Facebook </a>
 
                         </form>
