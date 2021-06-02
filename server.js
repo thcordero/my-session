@@ -15,7 +15,7 @@ const findOrCreate = require('mongoose-find-or-create');
 
 const app = express();
 
-// app.use(express.static(path.join(__dirname, 'client', 'build')));
+app.use(express.static(path.join(__dirname, 'client', 'build')));
 
 app.use(bodyParser.urlencoded({
     extended: true
@@ -96,13 +96,15 @@ passport.deserializeUser(function (id, done) {
 passport.use(new FacebookStrategy({
     clientID: "234403834687847",
     clientSecret: "60ebdbff923f8d599a03513b3230293a",
-    callbackURL: "http://localhost:5000/auth/facebook/callback",
+    callbackURL: "https://your-check-list.herokuapp.com/auth/facebook/callback",
     profileFields: ['id', 'displayName', 'photos', 'emails']
     
 },
     (accessToken, refreshToken, profile, done) => {
+
+        console.log(profile);
       
-        User.findOrCreate({ facebookId: profile.id }, (err, user) => {
+        User.findOrCreate({ facebookId: profile.id }, { username: profile.emails[0].value }, (err, user) => {
             
             if (err) {
                 return done(err);
@@ -110,7 +112,6 @@ passport.use(new FacebookStrategy({
             done(null, user);
         });
     }
-
 ));
 
 app.get("/auth/facebook", passport.authenticate('facebook',{ scope : ['email'] }));
@@ -122,7 +123,7 @@ app.get("/auth/facebook/callback", function (req, res) {
 
         console.log(req.isAuthenticated());
         console.log(req.user);
-        res.redirect("http://localhost:3000/");
+        res.redirect("https://your-check-list.herokuapp.com/");
 
     });
 
@@ -284,9 +285,9 @@ app.delete("/api/list/:userId", (req, res) => {
 
 });
 
-// app.get('/*', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
-// });
+app.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+});
 
 app.listen(process.env.PORT || 5000, () => {
     console.log("Server started...");

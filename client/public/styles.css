@@ -8,10 +8,15 @@ body{
     margin: auto;
 
     width: 250px;
-    height: 20rem;
+    height: 400px;
     position: relative;
+    text-align: center;
     
   
+}
+
+.login-box a{
+    background-color: royalblue;
 }
 
 .login-credentials{
@@ -45,7 +50,7 @@ body{
     position: absolute;
     width: 240px;
     text-align: center;
-    top: 70%;
+    top: 85%;
     left: 50%;
     font-size: 0.7rem;
     color:  #cc0000;
