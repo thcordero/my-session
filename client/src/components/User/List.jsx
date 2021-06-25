@@ -87,7 +87,7 @@ const List = () => {
                 placeholder="Add an item..."
                 autoComplete="off" />
 
-            <input type="submit" value="Add" />
+            <input className="add-button btn btn-block" type="submit" value="Add" />
         </form>
 
         <hr />

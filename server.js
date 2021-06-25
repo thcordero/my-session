@@ -8,6 +8,9 @@ const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const MongoStore = require("connect-mongo");
 const path = require("path");
+const FacebookStrategy = require('passport-facebook').Strategy;
+const findOrCreate = require('mongoose-find-or-create');
+
 
 
 const app = express();
@@ -26,9 +29,9 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         httpOnly: false,
-        maxAge: 3000*60*60,
+        maxAge: 3000 * 60 * 60,
     },
-    
+
     store: MongoStore.create({
         mongoUrl: process.env.URL_DB,
     }),
@@ -63,11 +66,13 @@ const userSchema = new mongoose.Schema({
     lastName: String,
     username: String,
     password: String,
+    facebookId: String,
 });
 
 
 
 userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(findOrCreate);
 
 
 
@@ -75,8 +80,60 @@ const User = new mongoose.model("User", userSchema);
 
 passport.use(User.createStrategy());
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.serializeUser(function (user, done) {
+    done(null, user.id);
+});
+
+passport.deserializeUser(function (id, done) {
+    User.findById(id, function (err, user) {
+        done(err, user);
+    });
+});
+
+
+// -------------------Add Facebook Login--------------------------------
+
+passport.use(new FacebookStrategy({
+    clientID: "234403834687847",
+    clientSecret: "60ebdbff923f8d599a03513b3230293a",
+    callbackURL: "https://your-check-list.herokuapp.com/auth/facebook/callback",
+    profileFields: ['id', 'displayName', 'photos', 'emails']
+    
+},
+    (accessToken, refreshToken, profile, done) => {
+
+        console.log(profile);
+      
+        User.findOrCreate({ facebookId: profile.id }, { username: profile.emails[0].value }, (err, user) => {
+            
+            if (err) {
+                return done(err);
+            }
+            done(null, user);
+        });
+    }
+));
+
+app.get("/auth/facebook", passport.authenticate('facebook',{ scope : ['email'] }));
+
+app.get("/auth/facebook/callback", function (req, res) {
+
+
+    passport.authenticate("facebook")(req, res, () => {
+
+        console.log(req.isAuthenticated());
+        console.log(req.user);
+        res.redirect("https://your-check-list.herokuapp.com/");
+
+    });
+
+});
+
+
+
+
+
+/*---------------------------------------------------------------------*/
 
 app.post("/api/register", (req, res) => {
 
