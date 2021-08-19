@@ -9,18 +9,18 @@ import {
 import { useAuth } from "./Auth.jsx";
 
 
-const ProtectedRoute = ({ component: Component, ...rest }) => {
+const SecretsRoute = ({ component: Component, ...rest }) => {
 
     const auth = useAuth();
     console.log(auth);
 
     return <Route {...rest} >
 
-        {auth.validEmail ? <Component {...rest} /> : <Redirect to={{ pathname: "/" }} />}
+        {auth.isLogged ? <Component {...rest} /> : <Redirect to={{ pathname: "/" }} />}
 
     </Route>
 
 
 }
 
-export default ProtectedRoute;
+export default SecretsRoute;

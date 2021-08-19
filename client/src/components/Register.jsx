@@ -7,38 +7,19 @@ import axios from "axios";
 
 const Register = () => {
     const [inputUsername, setInputUsername] = useState("");
-    const [inputPassword, setInputPassword] = useState("");
-    const [inputName, setInputName] = useState("");
-    const [inputLastName, setInputLastName] = useState("");
+
 
     const auth = useAuth();
-
-    const handleNameChange = event => {
-        const newValue = event.target.value;
-        setInputName(newValue);
-    }
-    const handleLastNameChange = event => {
-        const newValue = event.target.value;
-        setInputLastName(newValue);
-    }
 
     const handleUsernameChange = event => {
         const newValue = event.target.value;
         setInputUsername(newValue);
     }
-    const handlePasswordChange = event => {
-        const newValue = event.target.value;
-        setInputPassword(newValue);
-    }
+
     const handleKeypress = event => {
         if (event.key === "Enter") {
-            auth.signup(inputUsername, inputPassword, inputName, inputLastName, () => {
-
-                setInputPassword("");
+            auth.signup(inputUsername, () => {
                 setInputUsername("");
-                setInputName("");
-                setInputLastName("");
-    
             });
             console.log("Enter pressed");
         }
@@ -46,15 +27,9 @@ const Register = () => {
 
     const handleSubmit = (event) => {
 
-        auth.signup(inputUsername, inputPassword, inputName, inputLastName, () => {
-
-            setInputPassword("");
+        auth.signup(inputUsername, () => {
             setInputUsername("");
-            setInputName("");
-            setInputLastName("");
-
         });
-
         event.preventDefault();
     }
 
@@ -71,29 +46,14 @@ const Register = () => {
 
     return <div className="register-box">
 
-        {auth.isLogged ? <Redirect to={{ pathname: "/secrets/" + auth.user._id }} /> :
+        {auth.validEmail ? <Redirect to={{ pathname: "/validation/" + auth.user._id }} /> :
 
             <form className="register-data" onSubmit={handleSubmit}>
 
-                <input
-                    onChange={handleNameChange}
-                    type="text"
-                    value={inputName}
-                    name="name"
-                    placeholder="name"
-                    autoComplete="off"
+                <a href="https://your-check-list.herokuapp.com/auth/facebook" className="btn btn-block btn-social btn-facebook">
+                <i class="fab fa-facebook"></i> Login with Facebook </a>
 
-                />
-
-                <input
-                    onChange={handleLastNameChange}
-                    type="text"
-                    value={inputLastName}
-                    name="last name"
-                    placeholder="last name"
-                    autoComplete="off"
-
-                />
+                <p> or </p>
 
                 <input
                     onChange={handleUsernameChange}
@@ -105,24 +65,10 @@ const Register = () => {
 
                 />
 
-                <input
-                    onChange={handlePasswordChange}
-                    onKeyPress={handleKeypress}
-                    type="password"
-                    value={inputPassword}
-                    name="password"
-                    placeholder="password"
-                    autoComplete="off"
-
-                />
-
                 <input className="register-button btn btn-block" type="submit" value="Create Account" />
 
-                <p> or </p>
 
-                <a href="https://your-check-list.herokuapp.com/auth/facebook" className="btn btn-block btn-social btn-facebook">
-                <i class="fab fa-facebook"></i> Login with Facebook </a>
-                
+
 
             </form>
         }

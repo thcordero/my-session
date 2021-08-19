@@ -10,7 +10,7 @@ const List = () => {
     const { id } = useParams();
 
     useEffect(() => {
-        axios.get("/api/list/" + id).then(res => {
+        axios.get("/api/secrets/" + id).then(res => {
             setItems(res.data);
             console.log(res.data);
             setLoadingList(false);
@@ -30,7 +30,7 @@ const List = () => {
 
     const handleAddItem = (event) => {
 
-        axios.post("/api/list/" + id, { item: inputNewItem }).then(res => {
+        axios.post("/api/secrets/" + id, { item: inputNewItem }).then(res => {
 
             console.log(res.data);
             setItems(prevValue => [...prevValue, res.data]);
@@ -49,7 +49,7 @@ const List = () => {
         });
 
 
-        axios.delete("/api/list/" + id, { data: { itemId } }).then(res => {
+        axios.delete("/api/secrets/" + id, { data: { itemId } }).then(res => {
 
             console.log(res.data);
 
@@ -61,7 +61,7 @@ const List = () => {
         setItems(prevValue => {
             return prevValue.filter((item) => {
                 if (item._id === itemId) {
-                    axios.patch("/api/list/" + id, { checkedItemId: itemId, checkedValue: !item.isChecked }).then(res => {
+                    axios.patch("/api/secrets/" + id, { checkedItemId: itemId, checkedValue: !item.isChecked }).then(res => {
                         console.log(res.data);
                     });
                     item.isChecked = !item.isChecked;

@@ -3,7 +3,7 @@ import axios from "axios";
 
 const instance = axios.create(
     {
-        baseURL: "https://your-check-list.herokuapp.com",
+        baseURL: "http://localhost:5000",
         withCredentials: true,
     }
 );
@@ -11,3 +11,4 @@ const instance = axios.create(
 export default instance;
 
 // "http://localhost:5000",
+//https://your-check-list.herokuapp.com

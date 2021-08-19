@@ -1,5 +1,6 @@
 import React, { useContext, createContext, useState } from "react";
 import axios from "./axios";
+import SetPassword from "./User/SetPassword";
 
 const authContext = createContext();
 const useAuth = () => {
@@ -12,24 +13,38 @@ const Authentication = {
     userData: null,
     errRegister: "",
     errLogin: "",
+    smtp_check: false,
 
 
-    async register(inputUsername, inputPassword, inputName, inputLastName) {
+    async register(inputUsername) {
 
-        await axios.post("/api/register", {
-            username: inputUsername,
-            password: inputPassword,
-            name: inputName,
-            lastName: inputLastName
-        }).then(res => {
+        await axios.post("/api/register/tempuser", {username: inputUsername}).then(res => {
             console.log(res.data);
-            this.errRegister = res.data.message;
+            if(res.data === "User already registed!"){
+                this.errRegister = res.data;
+            }
+            else {
+                this.errRegister = res.data.message;
+            }
+            this.smtp_check = res.data.smtp_check;
+            this.userData = res.data.user;
+
+        });
+
+        return Promise.resolve({ user: this.userData, error: this.errRegister, validEmail: this.smtp_check});
+
+    },
+
+    async setPasword(inputPassword, hash, username) {
+
+        await axios.post("/api/register", { _id: hash, password: inputPassword, username: username}).then(res => {
+            console.log(res.data);
             this.isLogged = res.data.isAuth;
             this.userData = res.data.user;
 
         });
 
-        return Promise.resolve({ user: this.userData, isAuth: this.isLogged, error: this.errRegister });
+        return Promise.resolve({ user: this.userData, isAuth: this.isLogged});
 
     },
 
@@ -86,16 +101,27 @@ const ProvideAuth = ({ children }) => {
 const useProvideAuth = () => {
 
     const [user, setUser] = useState(null);
+    const [validEmail, setValidEmail] = useState(false);
     const [isLogged, setIsLogged] = useState(false);
     const [loginError, setLoginError] = useState("");
     const [registerError, setRegisterError] = useState("");
 
-    const signup = (inputUsername, inputPassword, inputName, inputLastName, cb) => {
-        Authentication.register(inputUsername, inputPassword, inputName, inputLastName).then(res => {
+    const signup = (inputUsername, cb) => {
+        Authentication.register(inputUsername).then(res => {
             console.log(res);
             setRegisterError(res.error);
             setUser(res.user);
+            setValidEmail(res.validEmail);
+            cb();
+        });
+    }
+
+    const getAuthenticated = (inputPassword, user, cb) => {
+        Authentication.setPasword(inputPassword, user._id, user.username).then(res => {
+            console.log(res);
+            setRegisterError(res.error);
             setIsLogged(res.isAuth);
+            setUser(res.user);
             cb();
         });
     }
@@ -132,12 +158,15 @@ const useProvideAuth = () => {
         isLogged,
         loginError,
         registerError,
-        setLoginError,
-        setRegisterError,
+        validEmail,
         signup,
         signin,
         signout,
-        isAuthenticated
+        isAuthenticated,
+        getAuthenticated,
+        setRegisterError,
+        setLoginError,
+        setUser,
     };
 }
 

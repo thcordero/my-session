@@ -70,6 +70,11 @@ body{
     background-color: royalblue;
 }
 
+.register-box p{
+    margin-top: 10%;
+    margin-bottom: 10%;
+}
+
 .register-data{
     
     display: block;
